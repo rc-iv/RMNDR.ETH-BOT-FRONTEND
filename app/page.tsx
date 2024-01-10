@@ -28,7 +28,7 @@ export default function Home() {
             <div className="flex-1 ">
               <Image
                 className="rounded-lg shadow-lg"
-                src="/images/botinaction.jpg"
+                src="/images/botinaction.png"
                 alt="Bot in action 1"
                 width={375}
                 height={100}
@@ -36,7 +36,7 @@ export default function Home() {
             </div>
             <div className="flex-1">
               <Image
-                src="/images/botinaction2.jpg"
+                src="/images/botinaction2.png"
                 alt="Bot in action 2"
                 className="rounded-lg shadow-lg"
                 width={500}
