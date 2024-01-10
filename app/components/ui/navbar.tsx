@@ -27,7 +27,7 @@ const Navbar = () => {
             <FaTwitter className="text-2xl hover:text-blue-400" />
           </a>
           {/* Question icon with link to usage page */}
-          <Link href="/usage">
+          <Link href="/usage" >
             <FaQuestionCircle className="text-2xl hover:text-blue-400" />
           </Link>
         </div>
