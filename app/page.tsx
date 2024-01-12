@@ -1,7 +1,8 @@
 import Navbar from "./components/ui/navbar";
 import Image from "next/image";
-import { DiscordSignInButton } from "./components/ui/authButton";
+
 export default function Home() {
+
   return (
     <div>
       <Navbar />
@@ -25,7 +26,6 @@ export default function Home() {
               >
                 Invite
               </a>
-              {/* <DiscordSignInButton/> */}
             </div>
             <div className="flex-1 ">
               <Image
@@ -51,3 +51,4 @@ export default function Home() {
     </div>
   );
 }
+

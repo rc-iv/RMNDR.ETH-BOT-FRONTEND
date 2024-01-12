@@ -1,23 +1,17 @@
-"use client";
 import React from "react";
 import { FaDiscord, FaTwitter, FaQuestionCircle } from "react-icons/fa";
 import Link from "next/link";
-import { useSession } from "next-auth/react"
+import { DiscordSignInButton } from "./authButton";
 
 const Navbar = () => {
-  const { data: session, status } = useSession();
-  console.log(session);
-
-  const userName = session?.user.name;
-  const userImage = session?.user.image;
-
   return (
     <nav className="bg-slate-700 p-6 text-white">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold"><Link href="/">RMNDR.ETH</Link></h1>
+        <h1 className="text-2xl font-bold">
+          <Link href="/">RMNDR.ETH</Link>
+        </h1>
         <div className="flex items-center gap-4">
-          {/* <p>UserName: {session?.user.name}</p>
-          <img src={session?.user.image} alt="user image" className="rounded-full" /> */}
+          <DiscordSignInButton />
           {/* Discord Icon with link */}
           <a
             href="https://discord.gg/EEPfDWj4"
@@ -37,7 +31,7 @@ const Navbar = () => {
             <FaTwitter className="text-2xl hover:text-blue-400" />
           </a>
           {/* Question icon with link to usage page */}
-          <Link href="/usage" >
+          <Link href="/usage">
             <FaQuestionCircle className="text-2xl hover:text-blue-400" />
           </Link>
         </div>
