@@ -2,6 +2,8 @@ import { NextAuthOptions } from "next-auth";
 
 import DiscordProvider from "next-auth/providers/discord";
 
+
+
 interface Guild {
   guildId: string;
   guildName: string;
@@ -23,7 +25,7 @@ export const authConfig: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account }) {
-      console.log("jwt", token, account);
+      //console.log("jwt", token, account);
       if (account?.access_token) {
         const res = await fetch("https://discord.com/api/users/@me/guilds", {
           headers: {
@@ -37,20 +39,20 @@ export const authConfig: NextAuthOptions = {
           const guildName = guild.name;
           const isOwner = guild.owner;
           const permissions = guild.permissions;
-          token.guilds.push({
+          (token.guilds as Guild[]).push({
             guildId,
             guildName,
             isOwner,
             permissions,
           });
         }
-        console.log("guilds", token.guilds);
+        // console.log("guilds", token.guilds);
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.sub; // Discord's OAuth2 spec uses 'sub' for the ID
-      session.user.guilds = token.guilds;
+      session.user!.id = token.sub; // Discord's OAuth2 spec uses 'sub' for the ID
+      session.user!.guilds = token.guilds;
       return session;
     },
   },
