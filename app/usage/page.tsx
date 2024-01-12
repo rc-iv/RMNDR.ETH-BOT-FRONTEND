@@ -1,10 +1,8 @@
 import React from "react";
-import Navbar from "../components/ui/navbar";
 
 export default function Usage() {
   return (
     <div>
-      <Navbar />
       <div className="container mx-auto p-4">
         <h2 className="text-2xl font-bold my-4">Commands</h2>
         <hr></hr>

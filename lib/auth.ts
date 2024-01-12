@@ -1,14 +1,19 @@
 import { NextAuthOptions } from "next-auth";
-
+import { Session } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import { JWT } from "next-auth/jwt";
 
 
-
-interface Guild {
-  guildId: string;
-  guildName: string;
+export interface Guild {
+  id: string;
+  name: string;
   isOwner: boolean;
   permissions: number;
+}
+
+export interface ExtendedUser {
+  id?: string;
+  guilds?: Guild[];
 }
 
 export const authConfig: NextAuthOptions = {
@@ -35,13 +40,13 @@ export const authConfig: NextAuthOptions = {
         const guilds = await res.json();
         (token.guilds as Guild[]) = [];        
         for (const guild of guilds) {
-          const guildId = guild.id;
-          const guildName = guild.name;
+          const id = guild.id;
+          const name = guild.name;
           const isOwner = guild.owner;
           const permissions = guild.permissions;
           (token.guilds as Guild[]).push({
-            guildId,
-            guildName,
+            id,
+            name,
             isOwner,
             permissions,
           });
@@ -51,9 +56,10 @@ export const authConfig: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user!.id = token.sub; // Discord's OAuth2 spec uses 'sub' for the ID
-      session.user!.guilds = token.guilds;
-      return session;
+      const customSession = session as Session & { user: ExtendedUser };
+      customSession.user.id = token.sub as string;
+      customSession.user.guilds = token.guilds as Guild[];
+      return customSession;
     },
   },
 };
