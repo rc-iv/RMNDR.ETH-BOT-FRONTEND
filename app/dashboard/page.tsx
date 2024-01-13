@@ -19,7 +19,6 @@ export default async function Dashboard() {
   const events = await getAllEvents(mutualGuilds);
   return (
     <div className="flex justify-between bg-gradient-to-r from-green-700 to-blue-700 min-h-screen">
-      <div className="container p-4 w-1/5 bg-slate-800">Sidebar</div>
       <div>
         <EventFrame mutualGuilds={mutualGuilds} events={events}/>
       </div>

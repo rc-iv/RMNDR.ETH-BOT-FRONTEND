@@ -13,7 +13,10 @@ interface EventFrameProps {
 const EventFrame = ({ mutualGuilds, events }: EventFrameProps) => {
   const [selectedGuild, setSelectedGuild] = useState(mutualGuilds[0].id);
 
-  const filteredEvents = events.filter((event) => event.guild === selectedGuild);
+  const filteredEvents = events.filter(
+    (event) => event.guild === selectedGuild
+  );
+
   const handleGuildChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGuild(event.target.value);
     console.log(`selected guild: ${selectedGuild}`);
@@ -21,15 +24,21 @@ const EventFrame = ({ mutualGuilds, events }: EventFrameProps) => {
 
   console.log(events);
   return (
-    <div>
-      <GuildDropdown
-        guildList={mutualGuilds}
-        onGuildChange={handleGuildChange}
-      />
-      <div>
-        {filteredEvents.map((event) => (
-          <EventCard key={event.title} event={event} />
-        ))}
+    <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="w-full md:w-1/4 mb-4 md:mb-0 bg-white flex-shrink-0">
+        <GuildDropdown
+          guildList={mutualGuilds}
+          onGuildChange={handleGuildChange}
+        />
+      </div>
+      <div className="flex-1 bg-black">
+        {filteredEvents.length > 0 ? (
+          filteredEvents.map(event => (
+            <EventCard key={event.title} event={event} />
+          ))
+        ) : (
+          <p className="text-center text-white">No events available for this guild.</p>
+        )}
       </div>
     </div>
   );
