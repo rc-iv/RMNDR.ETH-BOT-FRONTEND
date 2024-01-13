@@ -1,8 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import { Session } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import { JWT } from "next-auth/jwt";
-
 
 export interface Guild {
   id: string;
