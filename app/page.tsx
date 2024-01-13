@@ -19,7 +19,6 @@ export default function Home() {
                 subscribe to events tailored to web3 and the blockchain. Save
                 time and never miss another opportunity.
               </p>
-              <p>envtest:{testenv}</p>
               <a
                 href="https://discord.com/api/oauth2/authorize?client_id=1192672583615783012&permissions=2147503104&scope=bot"
                 target="_blank"
