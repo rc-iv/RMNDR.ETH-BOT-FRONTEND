@@ -1,4 +1,4 @@
-import React, { cache } from "react";
+import React from "react";
 import EventFrame from "./eventFrame";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
@@ -43,11 +43,16 @@ const getMutualGuilds = async () => {
 
   const botGuilds = await botGuildsResponse.json();
 
+  if (!Array.isArray(botGuilds)) {
+    console.error('botGuilds is not an array:', botGuilds);
+    throw new Error("Invalid bot guilds response");
+  }
+
   // find mutual guilds by id
-  return userGuilds.filter((guild) =>
-    botGuilds.some((botGuild: Guild) => botGuild.id === guild.id)
+  return userGuilds.filter(guild =>
+    botGuilds.some(botGuild => botGuild.id === guild.id)
   );
-};
+}
 
 const getAllEvents = async (guildList: Guild[]) => {
   const url =
