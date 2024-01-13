@@ -2,12 +2,12 @@ import React from "react";
 
 export default function Usage() {
   return (
-    <div>
+    <div className="bg-gradient-to-r from-green-700 to-blue-700">
       <div className="container mx-auto p-4">
         <h2 className="text-2xl font-bold my-4">Commands</h2>
         <hr></hr>
-        <div className="flex justify-between">
-          <div className="my-6">
+        <div className="flex justify-between gap-x-6">
+          <div className="my-6 bg-slate-800 rounded-md p-4">
             <h3 className="text-3xl font-semibold mb-5">/add</h3>
             <p className="my-3">
               <strong>Description:</strong> Adds a new event.
@@ -60,7 +60,7 @@ export default function Usage() {
             </ul>
           </div>
 
-          <div className="my-6">
+          <div className="my-6 bg-slate-800 rounded-md p-4">
             <h3 className="text-3xl font-semibold mb-5">/edit</h3>
             <p className="my-3">
               <strong>Description:</strong> Edits an existing event.
@@ -119,20 +119,20 @@ export default function Usage() {
           </div>
         </div>
         <hr></hr>
-        <div className="my-6">
-        <h2 className="text-2xl font-bold my-4">Interactive Buttons</h2>
+        <div className="my-6 bg-slate-800 rounded-md p-4 w-[46.5%]">
+        <h2 className="text-2xl font-bold my-4 ">Interactive Buttons</h2>
           <ul>
-            <li>
-              <strong>Subscribe Button</strong>: Allows users to subscribe to
+            <li className="flex items-center my-2">
+              <strong className="text-xl bg-green-800 rounded-md py-1 px-2 mr-2">Subscribe</strong>Allows users to subscribe to
               event notifications. Users will be pinged 15 minutes before the
                 event starts.
             </li>
-            <li>
-              <strong>Edit Button</strong>: Provides the event ID for editing
+            <li className="flex items-center my-2">
+              <strong className="text-xl bg-blue-700 rounded-md py-1 px-10 mr-2">Edit</strong>Provides the event ID for editing
               using the `/edit` command.
             </li>
-            <li>
-              <strong>Broadcast Button</strong>: Broadcasts event details to the
+            <li className="flex items-center mt-3">
+              <strong className="text-xl bg-blue-700 rounded-md py-1 px-2 mr-2">Broadcast</strong>Broadcasts event details to the
               channel.
             </li>
           </ul>

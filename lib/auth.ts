@@ -17,6 +17,7 @@ export interface ExtendedUser {
 }
 
 export const authConfig: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID!,

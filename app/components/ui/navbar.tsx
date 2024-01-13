@@ -5,7 +5,7 @@ import { DiscordSignInButton } from "./authButton";
 
 const Navbar = () => {
   return (
-    <nav className="bg-slate-700 p-6 text-white">
+    <nav className="bg-gradient-to-r from-green-900 to-blue-900 p-6 text-white">
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-bold">
           <Link href="/">RMNDR.ETH</Link>

@@ -5,7 +5,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="min-h-screen bg-gradient-to-r from-green-600 to-blue-700">
+      <div className="min-h-screen bg-gradient-to-r from-green-700 to-blue-700">
         {/* Add geometric line patterns here if needed */}
         <main className="">
           <main className="py-5 container mx-auto flex flex-col text-center md:flex-row items-center gap-10">
@@ -21,6 +21,8 @@ export default function Home() {
               </p>
               <a
                 href="https://discord.com/api/oauth2/authorize?client_id=1192672583615783012&permissions=2147503104&scope=bot"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium"
               >
                 Invite
