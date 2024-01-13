@@ -12,7 +12,7 @@ export function DiscordSignInButton() {
 
   const handleSignOutClick = () => {
     signOut();
-  };
+  }; 
   return (
     <>
       {status === "loading" && (
