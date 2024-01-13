@@ -60,5 +60,5 @@ export const authConfig: NextAuthOptions = {
       return customSession;
     },
   },
-  secret: "authtest151029h1n3toong209ghn204hg9",
+  secret: process.env.NEXTAUTH_SECRET,
 };

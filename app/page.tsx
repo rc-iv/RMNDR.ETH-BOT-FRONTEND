@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
 
-  console.log(process.env.NEXTAUTH_SECRET)
+  const testenv = process.env.TEST_ENV_VAR;
   return (
     <div>
       <div className="min-h-screen bg-gradient-to-r from-green-700 to-blue-700">
@@ -19,6 +19,7 @@ export default function Home() {
                 subscribe to events tailored to web3 and the blockchain. Save
                 time and never miss another opportunity.
               </p>
+              <p>envtest:{testenv}</p>
               <a
                 href="https://discord.com/api/oauth2/authorize?client_id=1192672583615783012&permissions=2147503104&scope=bot"
                 target="_blank"
