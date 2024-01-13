@@ -3,6 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
 
+  console.log(process.env.NEXTAUTH_SECRET)
   return (
     <div>
       <div className="min-h-screen bg-gradient-to-r from-green-700 to-blue-700">
