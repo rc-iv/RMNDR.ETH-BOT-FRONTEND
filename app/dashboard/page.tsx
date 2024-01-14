@@ -7,6 +7,7 @@ import { Guild, ExtendedUser } from "@/lib/auth";
 
 export interface Event {
   id: string;
+  userId: string;
   guild: string;
   title: string;
   type: string;
@@ -58,9 +59,12 @@ const getMutualGuilds = async () => {
 }
 
 const getAllEvents = async (guildList: Guild[]) => {
+  const session = await getServerSession(authConfig);
+  const user = session!.user as ExtendedUser;
   const url =
     "https://hnrkhewcy8.execute-api.us-east-1.amazonaws.com/default/rmndrBotMain";
   const eventList = [] as Event[];
+  
   for (const guild of guildList) {
     const body = {
       guild: {
@@ -88,7 +92,6 @@ const getAllEvents = async (guildList: Guild[]) => {
         const componentDetails = component.components[0].custom_id;
         // eventid is everything after the "details-"
         const eventId = componentDetails.substring(8);
-        console.log(`eventId: ${eventId}`)
         
         const componentBody = {
           "guild": {
@@ -111,6 +114,7 @@ const getAllEvents = async (guildList: Guild[]) => {
         const timestamp = discordTimestamp.substring(3, discordTimestamp.length - 3);
         const event ={
           "id": eventId,
+          "userId": user.id,
           "guild": guild.id,
           "title": eventData.data.embeds[0].title,
           "type": eventData.data.embeds[0].fields[0].value,
