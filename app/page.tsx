@@ -1,3 +1,4 @@
+import { AutoScaling } from "aws-sdk";
 import Image from "next/image";
 
 export default function Home() {
@@ -33,8 +34,8 @@ export default function Home() {
                 className="rounded-lg shadow-lg"
                 src="/images/botinaction.png"
                 alt="Bot in action 1"
-                width={375}
-                height={100}
+                width={350}
+                height={300}
               />
             </div>
             <div className="flex-1">
@@ -42,7 +43,7 @@ export default function Home() {
                 src="/images/botinaction2.png"
                 alt="Bot in action 2"
                 className="rounded-lg shadow-lg"
-                width={500}
+                width={400}
                 height={300}
               />
             </div>

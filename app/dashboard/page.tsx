@@ -1,10 +1,12 @@
+"use server";
 import React from "react";
-import EventFrame from "./eventFrame";
+import EventFrame from "./components/eventFrame";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { Guild, ExtendedUser } from "@/lib/auth";
 
 export interface Event {
+  id: string;
   guild: string;
   title: string;
   type: string;
@@ -12,13 +14,15 @@ export interface Event {
   chain: string;
   creator: string;
   timestamp: string;
+  componentDetails: string;
 }
 
 export default async function Dashboard() {
   const mutualGuilds = await getMutualGuilds();
   const events = await getAllEvents(mutualGuilds);
+
   return (
-    <div className="flex justify-between bg-gradient-to-r from-green-700 to-blue-700 min-h-screen">
+    <div className="bg-gradient-to-r from-green-700 to-blue-700 min-h-screen">
       <div>
         <EventFrame mutualGuilds={mutualGuilds} events={events}/>
       </div>
@@ -82,6 +86,10 @@ const getAllEvents = async (guildList: Guild[]) => {
       const components = data.data.components;
       for (const component of components) {
         const componentDetails = component.components[0].custom_id;
+        // eventid is everything after the "details-"
+        const eventId = componentDetails.substring(8);
+        console.log(`eventId: ${eventId}`)
+        
         const componentBody = {
           "guild": {
             "id": guild.id
@@ -102,6 +110,7 @@ const getAllEvents = async (guildList: Guild[]) => {
         // remove the first and last 3 characters
         const timestamp = discordTimestamp.substring(3, discordTimestamp.length - 3);
         const event ={
+          "id": eventId,
           "guild": guild.id,
           "title": eventData.data.embeds[0].title,
           "type": eventData.data.embeds[0].fields[0].value,
@@ -109,6 +118,7 @@ const getAllEvents = async (guildList: Guild[]) => {
           "chain": eventData.data.embeds[0].fields[3].value,
           "creator": eventData.data.embeds[0].fields[4].value,
           "timestamp": timestamp,
+          "componentDetails": componentDetails,
         } as Event;
         eventList.push(event);
       }
