@@ -36,6 +36,40 @@ const EventCard = ({ event, userId, onEdit }: EventCardProps) => {
     }
   };
 
+  const handleDeleteClick = async () => {
+    if (event.creatorId !== userId) {
+      alert("You are not the creator of this event.");
+      return;
+    }
+    const payload = {
+      eventId: event.id,
+      guildId: event.guild,
+    };
+    const url =
+      "https://f7rymis8k3.execute-api.us-east-1.amazonaws.com/default/rmndrbot-deleteEvent";
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+
+    // Pop up cofirmation message
+    const confirmation = confirm("Are you sure you want to delete this event?");
+    if (!confirmation) {
+      return;
+    }
+
+    // reload page using nextjs
+    window.location.reload();
+
+    // if response is ok, pop up a success message, otherwise pop up an error message
+    if (response.ok) {
+      alert("Successfully deleted event!");
+    } else {
+      alert("Failed to delete event.");
+    }
+  };
+
   const handleEditClick = () => {
     onEdit(event);
   };
@@ -94,7 +128,7 @@ const EventCard = ({ event, userId, onEdit }: EventCardProps) => {
       <div className="my-2 bg-slate-600">
         <p className="">{event.creatorName}</p>
       </div>
-      <div className="flex justify-between text-center mt-5">
+      <div className="flex justify-center text-center mt-5 gap-x-4">
         {event.subscribedUsers.includes(userId) ? (
           <button
             className="bg-red-500 w-1/4 rounded-md text-sm"
@@ -111,13 +145,22 @@ const EventCard = ({ event, userId, onEdit }: EventCardProps) => {
           </button>
         )}
 
-        <div
-          className="bg-blue-500 w-1/4 rounded-md text-sm"
-          onClick={handleEditClick}
-        >
-          Edit
-        </div>
-        <div className="bg-blue-500 w-1/4 rounded-md text-sm">Delete</div>
+        {event.creatorId === userId && (
+          <>
+            <button
+              className="bg-blue-500 w-1/4 rounded-md text-sm"
+              onClick={handleEditClick}
+            >
+              Edit
+            </button>
+            <button
+              className="bg-blue-500 w-1/4 rounded-md text-sm"
+              onClick={handleDeleteClick}
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
