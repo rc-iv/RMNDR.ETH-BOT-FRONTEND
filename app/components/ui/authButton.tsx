@@ -16,13 +16,13 @@ export function DiscordSignInButton() {
   return (
     <>
       {status === "loading" && (
-        <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium">
+        <button className="bg-white text-blue-600 p-1 md:px-6 md:py-3 rounded-md font-sm md:font-medium">
           Loading...
         </button>
       )}
       {status === "unauthenticated" && (
         <button
-          className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium"
+          className="bg-white text-blue-600 p-1 md:px-6 md:py-3 rounded-md font-sm md:font-medium"
           onClick={handleSignInClick}
         >
           Sign in with Discord
@@ -31,12 +31,12 @@ export function DiscordSignInButton() {
       {status === "authenticated" && (
         <>
           <Link href="/dashboard">
-            <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium">
+            <button className="bg-white text-blue-600 p-1 md:px-6 md:py-3 rounded-md font-sm md:font-medium">
               Dashboard
             </button>
           </Link>
           <button
-            className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium"
+            className="bg-white text-blue-600 p-1 md:px-6 md:py-3 rounded-md font-sm md:font-medium"
             onClick={handleSignOutClick}
           >
             Sign Out

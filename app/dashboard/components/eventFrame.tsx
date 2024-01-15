@@ -110,7 +110,7 @@ const EventFrame = ({ mutualGuilds, events, userId }: EventFrameProps) => {
         <div className="flex flex-wrap justify-center gap-x-5">
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event) => (
-              <div key={event.eventName} className="w-2/5 my-2 p-2">
+              <div key={event.eventName} className="w-full md:w-2/5 my-2 p-2">
                 <EventCard
                   event={event}
                   userId={userId}

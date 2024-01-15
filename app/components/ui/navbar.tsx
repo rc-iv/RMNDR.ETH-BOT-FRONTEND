@@ -19,7 +19,7 @@ const Navbar = () => {
             rel="noopener noreferrer"
             aria-label="Discord"
           >
-            <FaDiscord className="text-2xl hover:text-blue-400" />
+            <FaDiscord className="text-sm md:text-2xl hover:text-blue-400" />
           </a>
           {/* Twitter Icon with link */}
           <a
@@ -28,11 +28,11 @@ const Navbar = () => {
             rel="noopener noreferrer"
             aria-label="Twitter"
           >
-            <FaTwitter className="text-2xl hover:text-blue-400" />
+            <FaTwitter className="text-sm md:text-2xl hover:text-blue-400" />
           </a>
           {/* Question icon with link to usage page */}
           <Link href="/usage">
-            <FaQuestionCircle className="text-2xl hover:text-blue-400" />
+            <FaQuestionCircle className="text-sm md:text-2xl hover:text-blue-400" />
           </Link>
         </div>
       </div>
