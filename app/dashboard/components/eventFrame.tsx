@@ -26,6 +26,11 @@ const EventFrame = ({ mutualGuilds, events, userId }: EventFrameProps) => {
   };
 
   const handleSave = (updatedEvent: Event, originalEvent: Event) => {
+
+    if (userId !== originalEvent.creatorId) {
+      alert("You are not the creator of this event.");
+      return;
+    }
     // loop through keys in event and compare to original event
     const updatedFields = {} as Event;
     for (const key in updatedEvent) {
