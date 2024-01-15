@@ -3,36 +3,30 @@ import { Event } from "../page";
 
 interface EventCardProps {
   event: Event;
+  userId: string;
 }
 
-const EventCard = ({ event }: EventCardProps) => {
-  const dateString = parseTimestamp(event.timestamp);
+const EventCard = ({ event, userId }: EventCardProps) => {
+  const dateString = parseDateTime(event.eventDateTime);
   const links = findLinks(event.description);
   const description = removeLinks(event.description);
 
   const subscribeToEvent = async () => {
     const payload = {
-      data: {
-        component_type: 2,
-        custom_id: `subscribe-${event.id}`,
-      },
-      guild: {
-        id: event.guild,
-      },
-      member: {
-        user: {
-          id: event.userId,
-        },
-      },
+      eventId: event.id,
+      guildId: event.guild,
+      userId: userId,
     };
     const url =
-      "https://hnrkhewcy8.execute-api.us-east-1.amazonaws.com/default/rmndrBotMain";
+      "https://f7rymis8k3.execute-api.us-east-1.amazonaws.com/default/rmndrbot-subscribeToEvent";
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(payload),
       cache: "no-store",
     });
-    if (response.status === 200) {
+
+    // if response is ok, pop up a success message, otherwise pop up an error message
+    if (response.ok) {
       alert("Successfully subscribed to event!");
     } else {
       alert("Failed to subscribe to event.");
@@ -42,13 +36,13 @@ const EventCard = ({ event }: EventCardProps) => {
   return (
     <div className="md:w-full bg-slate-700 rounded-lg p-3">
       <div className="my-2">
-        <h1 className="text-2xl font-bold">{event.title}</h1>
+        <h1 className="text-2xl font-bold">{event.eventName}</h1>
       </div>
       <div className="text-xl">
         <h2>Type</h2>
       </div>
       <div className="my-2 bg-slate-600">
-        <p className="">{event.type}</p>
+        <p className="">{event.eventType}</p>
       </div>
       <div className="text-xl">
         <p>Description</p>
@@ -91,7 +85,7 @@ const EventCard = ({ event }: EventCardProps) => {
         <p>Creator</p>
       </div>
       <div className="my-2 bg-slate-600">
-        <p className="">{event.creator}</p>
+        <p className="">{event.creatorName}</p>
       </div>
       <div className="flex justify-between text-center">
         <button
@@ -107,20 +101,12 @@ const EventCard = ({ event }: EventCardProps) => {
   );
 };
 
-const parseTimestamp = (timestamp: string) => {
-  const unixTimestamp = parseInt(timestamp);
-  // convert unix timestamp to a datetime
-  const date = new Date(unixTimestamp * 1000);
-  const hours = date.getHours();
-  const minutes = "0" + date.getMinutes();
-  const time = hours + ":" + minutes;
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  const dateString = month + "/" + day + "/" + year + " " + time;
-
-  return dateString;
+const parseDateTime = (dateTime: string) => {
+  // Datetime passed in at UTC Time in form of YYYY-MM-DDTHH:MM:SSZ
+  // Convert to local time
+  const date = new Date(dateTime);
+  // convert date to string
+  return date.toString();
 };
 
 const findLinks = (description: string) => {

@@ -5,33 +5,23 @@ import { Guild } from "@/lib/auth";
 import { Event } from "../page";
 import EventCard from "./eventCard";
 import SubscriberOptionDropdown from "./ui/subscribeDropdown";
-import { on } from "events";
 
 interface EventFrameProps {
   mutualGuilds: Guild[];
   events: Event[];
+  userId: string;
 }
 
-const EventFrame = ({ mutualGuilds, events}: EventFrameProps) => {
+const EventFrame = ({ mutualGuilds, events, userId}: EventFrameProps) => {
   const [selectedGuild, setSelectedGuild] = useState(mutualGuilds[0].id);
-  const [selectedSubscriberOption, setSelectedSubscriberOption] = useState("");
   
   const filteredEvents = events.filter( 
     (event) => event.guild === selectedGuild
   );
 
-
-
   const handleGuildChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGuild(event.target.value);
-    console.log(`selected guild: ${event.target.value}`);
   };
-
-  const handleSubscriberOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSubscriberOption(event.target.value);
-    console.log(`selected subscriber option: ${event.target.value}`);
-  }
-
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -40,14 +30,13 @@ const EventFrame = ({ mutualGuilds, events}: EventFrameProps) => {
           guildList={mutualGuilds}
           onGuildChange={handleGuildChange}
         />
-        <SubscriberOptionDropdown onSubscribeOptionChange={handleSubscriberOptionChange}/>
       </div>
       <div className="flex-1 p-4">
         <div className="flex flex-wrap justify-center md:justify-between -mx-2">
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event) => (
-              <div key={event.title} className="w-2/5 my-2 mx-10 p-2">
-                <EventCard event={event} />
+              <div key={event.eventName} className="w-2/5 my-2 mx-10 p-2">
+                <EventCard event={event} userId={userId} />
               </div>
             ))
           ) : (

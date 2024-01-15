@@ -7,35 +7,42 @@ import { Guild, ExtendedUser } from "@/lib/auth";
 
 export interface Event {
   id: string;
-  userId: string;
   guild: string;
-  title: string;
-  type: string;
-  description: string;
   chain: string;
-  creator: string;
-  timestamp: string;
-  componentDetails: string;
+  channelId: string;
+  channelName: string;
+  description: string;
+  eventDate: string;
+  eventDateTime: string;
+  eventName: string;
+  eventTime: string;
+  eventTimezone: string;
+  eventType: string;
+  subscribedUsers: string[];
+  creatorId: string;
+  creatorName: string;
 }
 
 export default async function Dashboard() {
-  const mutualGuilds = await getMutualGuilds();
+  const session = await getServerSession(authConfig);
+  const user = session!.user as ExtendedUser;
+  const mutualGuilds = await getMutualGuilds(user.guilds!);
   const events = await getAllEvents(mutualGuilds);
 
   return (
     <div className="bg-gradient-to-r from-green-700 to-blue-700 min-h-screen">
       <div>
-        <EventFrame mutualGuilds={mutualGuilds} events={events}/>
+        <EventFrame
+          mutualGuilds={mutualGuilds}
+          events={events}
+          userId={user.id!}
+        />
       </div>
     </div>
   );
 }
 
-const getMutualGuilds = async () => {
-  const session = await getServerSession(authConfig);
-  const user = session!.user as ExtendedUser;
-  const userGuilds = user.guilds as Guild[];
-
+const getMutualGuilds = async (userGuilds: Guild[]) => {
   const botGuildsResponse = await fetch(
     "https://discord.com/api/v8/users/@me/guilds",
     {
@@ -48,84 +55,61 @@ const getMutualGuilds = async () => {
   const botGuilds = await botGuildsResponse.json();
 
   if (!Array.isArray(botGuilds)) {
-    console.error('botGuilds is not an array:', botGuilds);
+    console.error("botGuilds is not an array:", botGuilds);
     throw new Error("Invalid bot guilds response");
   }
 
   // find mutual guilds by id
-  return userGuilds.filter(guild =>
-    botGuilds.some(botGuild => botGuild.id === guild.id)
+  return userGuilds.filter((guild) =>
+    botGuilds.some((botGuild) => botGuild.id === guild.id)
   );
-}
+};
 
 const getAllEvents = async (guildList: Guild[]) => {
-  const session = await getServerSession(authConfig);
-  const user = session!.user as ExtendedUser;
   const url =
-    "https://hnrkhewcy8.execute-api.us-east-1.amazonaws.com/default/rmndrBotMain";
+    "https://f7rymis8k3.execute-api.us-east-1.amazonaws.com/default/rmndrbot-getEventsForGuild";
   const eventList = [] as Event[];
-  
+
   for (const guild of guildList) {
     const body = {
-      guild: {
-        id: guild.id,
-      },
-      data: {
-        name: "list",
-        options: [
-          {
-            name: "all",
-            value: true,
-          },
-        ],
-      },
+      guildId: guild.id,
     };
+
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
       cache: "no-store",
     });
+
+    // check if the response is valid, skip guild if not
+    if (!response.ok) {
+      console.error(
+        `Failed to get events for guild ${guild.id}: ${response.statusText}`
+      );
+      continue;
+    }
+
     const data = await response.json();
-    if (data.data.content === "Here are the events I found:") {
-      const components = data.data.components;
-      for (const component of components) {
-        const componentDetails = component.components[0].custom_id;
-        // eventid is everything after the "details-"
-        const eventId = componentDetails.substring(8);
-        
-        const componentBody = {
-          "guild": {
-            "id": guild.id
-          },
-          "data": {
-            "component_type": 2,
-            "custom_id": componentDetails,
-          }
-        }
-        const componentResponse = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify(componentBody),
-          cache: "no-store"
-        })
-        const eventData = await componentResponse.json();
-        // raw discord timestamp
-        const discordTimestamp = eventData.data.embeds[0].fields[2].value;
-        // remove the first and last 3 characters
-        const timestamp = discordTimestamp.substring(3, discordTimestamp.length - 3);
-        const event ={
-          "id": eventId,
-          "userId": user.id,
-          "guild": guild.id,
-          "title": eventData.data.embeds[0].title,
-          "type": eventData.data.embeds[0].fields[0].value,
-          "description": eventData.data.embeds[0].fields[1].value,
-          "chain": eventData.data.embeds[0].fields[3].value,
-          "creator": eventData.data.embeds[0].fields[4].value,
-          "timestamp": timestamp,
-          "componentDetails": componentDetails,
-        } as Event;
-        eventList.push(event);
-      }
+    for (const event of data) {
+      const tempEvent = {} as Event;
+      tempEvent.id = event.pk;
+      tempEvent.guild = event.sk;
+      tempEvent.chain = event.chain;
+      tempEvent.channelId = event.channelId;
+      tempEvent.channelName = event.channelName;
+      tempEvent.description = event.description;
+      tempEvent.eventDate = event.eventDate;
+      tempEvent.eventDateTime = event.eventDateTime;
+      tempEvent.eventName = event.eventName;
+      tempEvent.eventTime = event.eventTime;
+      tempEvent.eventTimezone = event.eventTimezone;
+      tempEvent.eventType = event.eventType;
+      tempEvent.subscribedUsers = event.subscribedUsers;
+      tempEvent.creatorId = event.userId;
+      tempEvent.creatorName = event.userName;
+
+      console.log(JSON.stringify(tempEvent));
+      eventList.push(tempEvent);
     }
   }
   return eventList;
