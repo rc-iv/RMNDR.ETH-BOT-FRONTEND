@@ -7,6 +7,7 @@ interface GuildDropdownProps {
 }
 
 const GuildDropdown = ({ guildList, onGuildChange }: GuildDropdownProps) => {
+  
   return (
     <>
       <div className="m-2">

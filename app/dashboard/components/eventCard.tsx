@@ -1,36 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Event } from "../page";
+import { on } from "events";
 
 interface EventCardProps {
   event: Event;
   userId: string;
+  onEdit: (event: Event) => void;
 }
 
-const EventCard = ({ event, userId }: EventCardProps) => {
+const EventCard = ({ event, userId, onEdit }: EventCardProps) => {
   const dateString = parseDateTime(event.eventDateTime);
   const links = findLinks(event.description);
   const description = removeLinks(event.description);
 
-  const subscribeToEvent = async () => {
+  const subscribeHandler = async (subscribeOption: string) => {
     const payload = {
       eventId: event.id,
       guildId: event.guild,
       userId: userId,
     };
-    const url =
-      "https://f7rymis8k3.execute-api.us-east-1.amazonaws.com/default/rmndrbot-subscribeToEvent";
+    const url = `https://f7rymis8k3.execute-api.us-east-1.amazonaws.com/default/rmndrbot-${subscribeOption}ToEvent`;
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(payload),
       cache: "no-store",
     });
+    // reload page using nextjs
+    window.location.reload();
 
     // if response is ok, pop up a success message, otherwise pop up an error message
     if (response.ok) {
-      alert("Successfully subscribed to event!");
+      alert(`Successfully ${subscribeOption}d to event!`);
     } else {
-      alert("Failed to subscribe to event.");
+      alert(`Failed to ${subscribeOption} to event.`);
     }
+  };
+
+  const handleEditClick = () => {
+    onEdit(event);
   };
 
   return (
@@ -87,15 +94,30 @@ const EventCard = ({ event, userId }: EventCardProps) => {
       <div className="my-2 bg-slate-600">
         <p className="">{event.creatorName}</p>
       </div>
-      <div className="flex justify-between text-center">
-        <button
-          className="bg-green-500 w-1/4 rounded-md"
-          onClick={subscribeToEvent}
+      <div className="flex justify-between text-center mt-5">
+        {event.subscribedUsers.includes(userId) ? (
+          <button
+            className="bg-red-500 w-1/4 rounded-md text-sm"
+            onClick={() => subscribeHandler("unsubscribe")}
+          >
+            Unsubscribe ({event.subscribedUsers.length})
+          </button>
+        ) : (
+          <button
+            className="bg-green-500 w-1/4 rounded-md text-sm"
+            onClick={() => subscribeHandler("subscribe")}
+          >
+            Subscribe ({event.subscribedUsers.length})
+          </button>
+        )}
+
+        <div
+          className="bg-blue-500 w-1/4 rounded-md text-sm"
+          onClick={handleEditClick}
         >
-          Subscribe
-        </button>
-        <div className="bg-blue-500 w-1/4 rounded-md">Edit</div>
-        <div className="bg-blue-500 w-1/4 rounded-md">Delete</div>
+          Edit
+        </div>
+        <div className="bg-blue-500 w-1/4 rounded-md text-sm">Delete</div>
       </div>
     </div>
   );

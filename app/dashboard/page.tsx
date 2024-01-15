@@ -6,6 +6,7 @@ import { authConfig } from "@/lib/auth";
 import { Guild, ExtendedUser } from "@/lib/auth";
 
 export interface Event {
+  [key:string] : any;
   id: string;
   guild: string;
   chain: string;
@@ -60,9 +61,17 @@ const getMutualGuilds = async (userGuilds: Guild[]) => {
   }
 
   // find mutual guilds by id
-  return userGuilds.filter((guild) =>
+  const filteredGuilds = userGuilds.filter((guild) =>
     botGuilds.some((botGuild) => botGuild.id === guild.id)
   );
+  const allGuildsOption = {
+    id: "all",
+    name: "All",
+    isOwner: false,
+  } as Guild;
+  filteredGuilds.unshift(allGuildsOption);
+  console.log(filteredGuilds);
+  return filteredGuilds; 
 };
 
 const getAllEvents = async (guildList: Guild[]) => {
@@ -112,5 +121,13 @@ const getAllEvents = async (guildList: Guild[]) => {
       eventList.push(tempEvent);
     }
   }
+
+  // sort events by date
+  eventList.sort((a, b) => {
+    const aDate = new Date(a.eventDateTime);
+    const bDate = new Date(b.eventDateTime);
+    return aDate.getTime() - bDate.getTime();
+  });
+
   return eventList;
 };
