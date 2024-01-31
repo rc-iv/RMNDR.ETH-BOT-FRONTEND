@@ -11,7 +11,15 @@ const Navbar = () => {
           <Link href="/">RMNDR.ETH</Link>
         </h1>
         <div className="flex items-center gap-4">
-          <DiscordSignInButton />
+          {/* <DiscordSignInButton /> */}
+          <a
+            href="https://discord.com/api/oauth2/authorize?client_id=1192672583615783012&permissions=2147503104&scope=bot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium"
+          >
+            Invite
+          </a>
           {/* Discord Icon with link */}
           <a
             href="https://discord.gg/EEPfDWj4"
